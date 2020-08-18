@@ -18,8 +18,15 @@ data "vsphere_virtual_machine" "template" {
   datacenter_id = data.vsphere_datacenter.dc.id
 }
 
+resource "vsphere_folder" "folder" {
+  path = "Suresh Pawar"
+  type          = "vm"
+  datacenter_id = data.vsphere_datacenter.dc.id
+}
+
 resource "vsphere_virtual_machine" "terraform-vm" {
-  name             = "terraform-vm"
+  name             = "tf-centos65x64"
+  folder           = "Suresh Pawar"
   resource_pool_id = data.vsphere_compute_cluster.cluster.resource_pool_id
   datastore_id     = data.vsphere_datastore.datastore.id
   count            = 1
@@ -35,20 +42,18 @@ resource "vsphere_virtual_machine" "terraform-vm" {
 
   disk {
     label            = "disk0"
-    size             = 20
     unit_number      = 0
-    #size             = data.vsphere_virtual_machine.template.disks.0.size
-    #eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
-    #thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
+    size             = data.vsphere_virtual_machine.template.disks.0.size
+    eagerly_scrub    = data.vsphere_virtual_machine.template.disks.0.eagerly_scrub
+    thin_provisioned = data.vsphere_virtual_machine.template.disks.0.thin_provisioned
   }
  
   disk {
     label            = "disk1"
-    size             = 5
     unit_number      = 1
-    #size             = data.vsphere_virtual_machine.template.disks.1.size
-    #eagerly_scrub    = data.vsphere_virtual_machine.template.disks.1.eagerly_scrub
-    #thin_provisioned = data.vsphere_virtual_machine.template.disks.1.thin_provisioned
+    size             = data.vsphere_virtual_machine.template.disks.1.size
+    eagerly_scrub    = data.vsphere_virtual_machine.template.disks.1.eagerly_scrub
+    thin_provisioned = data.vsphere_virtual_machine.template.disks.1.thin_provisioned
   }
 
   clone {
@@ -56,8 +61,8 @@ resource "vsphere_virtual_machine" "terraform-vm" {
 
     customize {
       linux_options {
-        host_name = "terraform-test"
-        domain    = "rackwareinc..lab"
+        host_name = "tf-centos65x64"
+        domain    = "rackwareinc.lab"
       }
       network_interface {}
 
