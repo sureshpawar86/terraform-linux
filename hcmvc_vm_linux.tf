@@ -68,7 +68,13 @@ resource "vsphere_virtual_machine" "terraform-vm" {
 
     }
   }
+
+
+ provisioner "local-exec" {
+        command = "sleep 180; ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook shutdown_vm.yaml"
+ }
 }
+
 
 #resource "vsphere_virtual_machine_snapshot" "demo1" {
 #  virtual_machine_uuid = vsphere_virtual_machine.terraform-vm.id
