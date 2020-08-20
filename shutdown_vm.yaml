@@ -1,7 +1,6 @@
 ---
 - hosts: localhost
-  #become: true
-  #connection: local
+  connection: local
   gather_facts: False
   vars:
     datacenter_name: 'hcm-dc65-01'
@@ -12,19 +11,16 @@
 
   tasks:
   - name: Set the state of a virtual machine to poweroff
-    vmware_guest_powerstate:
+    vmware_guest:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       validate_certs: no
       folder: /Suresh Pawar/
       name: tf-centos65x64
-      state: powered-off
-    delegate_to: localhost
-    #register: deploy
+      state: poweredoff
 
-  tasks:
-  - name: Create a snapshot
+  - name: Create a clean os snapshot
     vmware_guest_snapshot:
       hostname: "{{ vcenter_hostname }}"
       username: "{{ vcenter_username }}"
@@ -34,7 +30,19 @@
       folder: /Suresh Pawar/
       name: tf-centos65x64
       state: present
-      snapshot_name: clean_os
-      description: snap1_description
+      snapshot_name: Clean_OS
+      description: clean os snapshot
+    delegate_to: localhost
+
+  - name: Power On the virtual machine
+    vmware_guest:
+      hostname: "{{ vcenter_hostname }}"
+      username: "{{ vcenter_username }}"
+      password: "{{ vcenter_password }}"
+      datacenter: "{{ datacenter_name }}"
+      validate_certs: no
+      folder: /Suresh Pawar/
+      name: tf-centos65x64
+      state: poweredon
     delegate_to: localhost
 
