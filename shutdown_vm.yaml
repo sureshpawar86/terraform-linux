@@ -8,6 +8,8 @@
     vcenter_hostname: '172.29.40.19'
     vcenter_password: 'R@ckware4IT'
     vcenter_username: 'administrator@vsphere.local'
+    name: 'tf-centos65x64'
+    folder: '/Suresh Pawar/'
 
   tasks:
   - name: Set the state of a virtual machine to poweroff
@@ -16,8 +18,8 @@
       username: "{{ vcenter_username }}"
       password: "{{ vcenter_password }}"
       validate_certs: no
-      folder: /Suresh Pawar/
-      name: tf-centos65x64
+      folder: "{{ folder }}"
+      name: "{{ name }}"
       state: poweredoff
 
   - name: Create a clean os snapshot
@@ -27,8 +29,8 @@
       password: "{{ vcenter_password }}"
       datacenter: "{{ datacenter_name }}"
       validate_certs: False
-      folder: /Suresh Pawar/
-      name: tf-centos65x64
+      folder: "{{ folder }}"
+      name: "{{ name }}"
       state: present
       snapshot_name: Clean_OS
       description: clean os snapshot
@@ -41,8 +43,8 @@
       password: "{{ vcenter_password }}"
       datacenter: "{{ datacenter_name }}"
       validate_certs: no
-      folder: /Suresh Pawar/
-      name: tf-centos65x64
+      folder: "{{ folder }}"
+      name: "{{ name }}"
       state: poweredon
     delegate_to: localhost
 
