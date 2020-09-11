@@ -76,11 +76,3 @@ resource "vsphere_virtual_machine" "terraform-vm" {
 }
 
 
-#resource "vsphere_virtual_machine_snapshot" "demo1" {
-#  virtual_machine_uuid = vsphere_virtual_machine.terraform-vm.id
-#  snapshot_name        = "Clean_OS"
-#  description          = "This is Demo Snapshot"
-#  memory               = "false"
-#  quiesce              = "false"
-#}
-
